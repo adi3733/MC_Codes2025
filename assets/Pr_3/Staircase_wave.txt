@@ -1,0 +1,19 @@
+#include <reg51.h>
+
+void ms_delay(unsigned int t) {
+    unsigned int i, j;
+    for(i=0;i<t;i++)
+        for(j=0;j<1275;j++);
+}
+
+void main(void) {
+    unsigned char val;
+    while(1) {
+        for(val=0; val<=255; val+=32) {
+            P1 = val;     // Output steps
+            ms_delay(100);
+        }
+        P1 = 0;           // Reset
+        ms_delay(100);
+    }
+}

@@ -1,0 +1,81 @@
+/*-----------------------------------------------------------
+   Practical 6: Timer0 Interrupt-Based LED Toggling (100 ms)
+   Controller : PIC18F4550
+   Clock      : 48 MHz
+------------------------------------------------------------*/
+
+/*-----------------------------------------------------------
+   CALCULATIONS:
+   Required delay  = 100 ms
+   Timer value     = 0xFFFF - (Required time) / (4 * Tosc * Prescaler)
+                   = 0xFFFF - (0.1 * 48,000,000) / (4 * 256)
+                   = 0xFFFF - 0x124F
+                   = 0xEDB0
+   → TMR0H = 0xED
+     TMR0L = 0xB0
+------------------------------------------------------------*/
+
+#include <p18f4550.h>
+
+//------------------------------------------------------------
+// Global Variable
+//------------------------------------------------------------
+volatile bit timer_set = 0;
+
+//------------------------------------------------------------
+// Timer0 Initialization
+//------------------------------------------------------------
+void timerInit(void)
+{
+    // Configure Timer0: 16-bit mode, prescaler 1:256
+    T0CON = 0b00000111;
+
+    // Load Timer0 registers for 100 ms delay
+    TMR0H = 0xED;
+    TMR0L = 0xB0;
+}
+
+//------------------------------------------------------------
+// Interrupt Initialization
+//------------------------------------------------------------
+void Interrupt_Init(void)
+{
+    RCONbits.IPEN = 1;           // Enable interrupt priority levels
+    INTCON = 0b11100000;         // Enable global & Timer0 interrupts
+    INTCON2bits.TMR0IP = 0;      // Set Timer0 interrupt as low priority
+}
+
+//------------------------------------------------------------
+// Low-Priority Interrupt Service Routine
+//------------------------------------------------------------
+void interrupt low_priority timerinterrupt(void)
+{
+    if (TMR0IF == 1)             // If Timer0 interrupt flag is set
+    {
+        TMR0ON = 0;              // Stop Timer0
+        TMR0IF = 0;              // Clear interrupt flag
+
+        // Reload Timer0 for next 100 ms cycle
+        TMR0H = 0xED;
+        TMR0L = 0xB0;
+
+        LATB = ~LATB;            // Toggle LEDs on PORTB
+        TMR0ON = 1;              // Restart Timer0
+    }
+}
+
+//------------------------------------------------------------
+// Main Function
+//------------------------------------------------------------
+void main(void)
+{
+    TRISB = 0x00;                // Configure PORTB as output
+    LATB  = 0xAA;                // Initial LED pattern
+
+    Interrupt_Init();            // Initialize interrupts
+    timerInit();                 // Initialize Timer0
+
+    TMR0ON = 1;                  // Start Timer0
+
+    while (1);                   // Infinite loop (handled by ISR)
+}

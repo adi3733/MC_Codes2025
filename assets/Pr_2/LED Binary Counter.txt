@@ -1,0 +1,15 @@
+#include <REGX51.H>
+
+void delay(unsigned int time) {
+    unsigned int i, j;
+    for(i = 0; i < time; i++)
+        for(j = 0; j < 1275; j++);
+}
+
+void main() {
+    unsigned char count = 0;
+    while(1) {
+        P1 = count++;     // Output binary count to LEDs
+        delay(500);
+    }
+}

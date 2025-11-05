@@ -1,0 +1,65 @@
+/*-------------------------------------------------------
+   Practical 7: Interfacing Serial Port (PC Communication)
+   Controller : PIC18F4550
+   Clock      : 48 MHz
+   Baud Rate  : 9600
+---------------------------------------------------------*/
+
+/* Baud Rate Generation:
+   n => required baudrate
+   BRGH = 0 (Low speed)
+   SPBRG = (Fosc / (64 * n)) - 1
+   For 9600 baudrate, SPBRG ≈ 77
+*/
+
+#include <p18F4550.h>
+#include <stdio.h>
+
+#define Fosc 48000000UL   // 48 MHz crystal frequency
+
+// UART Initialization
+void InitUART(unsigned int baudrate)
+{
+    TRISCbits.RC6 = 0;   // TX pin set as output
+    TRISCbits.RC7 = 1;   // RX pin set as input
+
+    SPBRG = (unsigned char)(((Fosc / 64) / baudrate) - 1);
+
+    BAUDCON = 0b00000000;   // Non-inverted data, 8-bit baudrate generator
+    TXSTA   = 0b00100000;   // Asynchronous, 8-bit, TX enabled, low-speed baudrate
+    RCSTA   = 0b10010000;   // Serial port enabled, 8-bit, continuous receive enabled
+}
+
+// Transmit one character
+void SendChar(unsigned char data)
+{
+    while (TXSTAbits.TRMT == 0);  // Wait until transmit buffer is empty
+    TXREG = data;                 // Transmit data
+}
+
+// Overriding putch() for printf()
+void putch(unsigned char data)
+{
+    SendChar(data);
+}
+
+// Receive one character
+unsigned char GetChar(void)
+{
+    while (!PIR1bits.RCIF);  // Wait until receive buffer is full
+    return RCREG;            // Return received data
+}
+
+// Main function
+void main(void)
+{
+    InitUART(9600);   // Initialize UART at 9600 baudrate
+
+    printf("\r\nHello MicroPIC-18F: Enter any Key from Keyboard\r\n");
+
+    while (1)
+    {
+        // Receive character from PC and echo back
+        printf("%c", GetChar());
+    }
+}

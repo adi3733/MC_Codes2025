@@ -1,0 +1,21 @@
+#include <reg51.h>
+
+void ms_delay(unsigned int);
+
+void main(void)
+{
+    while(1)
+    {
+        P1 = 0x55;       // Send 01010101 to port P1
+        ms_delay(250);   // Delay 250 ms
+        P1 = 0xAA;       // Send 10101010 to port P1
+        ms_delay(250);   // Delay 250 ms
+    }
+}
+
+void ms_delay(unsigned int time)
+{
+    unsigned int i, j;
+    for(i=0; i<time; i++)
+        for(j=0; j<1275; j++); // ~1 ms for 12 MHz
+}

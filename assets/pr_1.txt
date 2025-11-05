@@ -1,0 +1,20 @@
+#include <REG51.H>
+
+void main(void)
+{
+    unsigned char a = 20;
+    unsigned char b = 10;
+    unsigned char sum, diff, prod, div;
+
+    sum  = a + b;
+    diff = a - b;
+    prod = a * b;
+    div  = a / b;
+
+	P0 = sum;     // Display addition result on Port 0
+    P1 = diff;     // Display subtraction result on Port 1
+    P2 = prod;    // Display multiplication result on Port 2
+    P3 = div;    // Display Division result on Port 3
+
+    while(1);
+} 

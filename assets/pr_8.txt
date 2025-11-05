@@ -1,0 +1,122 @@
+/*-----------------------------------------------------------
+   Practical 8: Interface Analog Voltage 0–5V to Internal ADC
+                 and Display Value on LCD
+   Controller : PIC18F4550
+   Clock      : 48 MHz
+------------------------------------------------------------*/
+
+#include <p18f4550.h>
+#include <stdio.h>
+
+// LCD control pin definitions
+#define LCD_EN     LATAbits.LA1
+#define LCD_RS     LATAbits.LA0
+#define LCDPORT    LATB
+
+//------------------------ LCD Delay ------------------------//
+void lcd_delay(unsigned int time)
+{
+    unsigned int i, j;
+    for (i = 0; i < time; i++)
+        for (j = 0; j < 50; j++);
+}
+
+//-------------------- LCD Instructions ---------------------//
+void SendInstruction(unsigned char command)
+{
+    LCD_RS = 0;          // RS = 0 → Instruction
+    LCDPORT = command;
+    LCD_EN = 1;          // Enable high
+    lcd_delay(10);
+    LCD_EN = 0;          // Falling edge latches command
+    lcd_delay(10);
+}
+
+//---------------------- LCD Data Write ---------------------//
+void SendData(unsigned char lcddata)
+{
+    LCD_RS = 1;          // RS = 1 → Data
+    LCDPORT = lcddata;
+    LCD_EN = 1;
+    lcd_delay(10);
+    LCD_EN = 0;          // Data latched on falling edge
+    lcd_delay(10);
+}
+
+//---------------------- LCD Initialization -----------------//
+void InitLCD(void)
+{
+    TRISB = 0x00;        // LCD data port as output
+    TRISAbits.RA0 = 0;   // EN pin as output
+    TRISAbits.RA1 = 0;   // RS pin as output
+
+    SendInstruction(0x38);   // 8-bit, 2-line, 5x7 matrix
+    SendInstruction(0x06);   // Entry mode
+    SendInstruction(0x0C);   // Display ON, cursor OFF
+    SendInstruction(0x01);   // Clear display
+    SendInstruction(0x80);   // Set cursor to line 1
+}
+
+//----------------------- ADC Initialization ----------------//
+void ADCInit(void)
+{
+    TRISEbits.RE1 = 1;       // Set RE1 (AN6) as analog input
+    TRISEbits.RE2 = 1;       // Set RE2 (AN7) as analog input
+    ADCON1 = 0b00000111;     // Ref voltages Vdd/Vss; AN0–AN7 analog
+    ADCON2 = 0b10101110;     // Right-justified; 4T acquisition; Fosc/64 clock
+}
+
+//----------------------- ADC Read Function -----------------//
+unsigned short Read_ADC(unsigned char Ch)
+{
+    ADCON0 = 0b00000001 | (Ch << 2);  // ADC on, select channel
+    GODONE = 1;                       // Start conversion
+    while (GO_DONE == 1);             // Wait until complete
+    return ADRES;                     // Return 10-bit result
+}
+
+//----------------------- Display Result --------------------//
+void DisplayResult(unsigned short ADCVal)
+{
+    unsigned char i, text[16];
+    unsigned short tempv = ADCVal;
+
+    // Display 10-bit binary on line 1
+    SendInstruction(0x80);  // Line 1 start address
+    for (i = 0; i < 10; i++)
+    {
+        if (tempv & 0x200)
+            SendData('1');
+        else
+            SendData('0');
+        tempv <<= 1;
+    }
+
+    // Convert ADC value to millivolts
+    ADCVal = (5500 / 1024) * ADCVal;
+
+    // Format and print result
+    sprintf(text, "ADC value=%4dmv", ADCVal);
+
+    // Display string on line 2
+    SendInstruction(0xC0);
+    for (i = 0; i < 16 && text[i] != '\0'; i++)
+        SendData(text[i]);
+}
+
+//--------------------------- MAIN --------------------------//
+void main()
+{
+    unsigned short Ch_result;
+
+    TRISB = 0x00;     // LCD port as output
+    ADCInit();        // Initialize ADC
+    InitLCD();        // Initialize LCD
+
+    while (1)
+    {
+        Ch_result = Read_ADC(7);    // Read from channel 7 (AN7)
+        DisplayResult(Ch_result);   // Show binary + mV on LCD
+        lcd_delay(1000);
+    }
+}

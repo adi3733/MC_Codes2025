@@ -1,0 +1,32 @@
+#include <REGX51.H>
+
+void delay(unsigned int time) {
+    unsigned int i, j;
+    for(i = 0; i < time; i++)
+        for(j = 0; j < 1275; j++);
+}
+
+void main() {
+    unsigned char left = 0x01;   // Start from bit 0
+    unsigned char right = 0x80;  // Start from bit 7
+
+    while(1) {
+        // LEFT rotation on Port 1, RIGHT on Port 2
+        for(left = 0x01, right = 0x80;
+            left != 0x00 && right != 0x00;
+            left <<= 1, right >>= 1) {
+            P1 = ~left;    // Active-low LEDs
+            P2 = ~right;
+            delay(500);
+        }
+
+        // RIGHT rotation on Port 1, LEFT on Port 2
+        for(left = 0x80, right = 0x01;
+            left != 0x00 && right != 0x00;
+            left >>= 1, right <<= 1) {
+            P1 = ~left;
+            P2 = ~right;
+            delay(500);
+        }
+    }
+}

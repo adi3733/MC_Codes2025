@@ -1,0 +1,71 @@
+/*-----------------------------------------------------------
+   Practical 4 (Part B): Interfacing Push Buttons, LEDs,
+                         Relay & Buzzer with PIC18F4550
+   Controller : PIC18F4550
+   Clock      : 48 MHz
+------------------------------------------------------------*/
+
+#include <p18f4550.h>
+
+//-----------------------------------------------
+// Simple delay routine
+//-----------------------------------------------
+void delay()
+{
+    unsigned int i;
+    for (i = 0; i < 30000; i++);
+}
+
+//-----------------------------------------------
+// Main function
+//-----------------------------------------------
+void main()
+{
+    unsigned char i, key = 0;
+
+    TRISB = 0x00;             // LEDs on PORTB → output
+    PORTB = 0x00;
+
+    TRISDbits.TRISD0 = 1;     // Push button 1 → input (RD0)
+    TRISDbits.TRISD1 = 1;     // Push button 2 → input (RD1)
+
+    TRISDbits.TRISD2 = 0;     // Buzzer → output (RD2)
+    TRISAbits.TRISA4 = 0;     // Relay → output (RA4)
+
+    while (1)
+    {
+        // Read push buttons
+        if (PORTDbits.RD0 == 0) key = 0;   // Button 1 pressed
+        if (PORTDbits.RD1 == 0) key = 1;   // Button 2 pressed
+
+        // Key 0 → relay off, buzzer off, LEDs chase right to left
+        if (key == 0)
+        {
+            PORTAbits.RA4 = 1;    // Relay OFF
+            PORTDbits.RD2 = 0;    // Buzzer OFF
+
+            for (i = 0; i < 8; i++)     // LED chase right to left
+            {
+                PORTB = (1 << i);
+                delay();
+                PORTB = 0x00;
+                delay();
+            }
+        }
+
+        // Key 1 → relay on, buzzer on, LEDs chase left to right
+        if (key == 1)
+        {
+            PORTAbits.RA4 = 0;    // Relay ON
+            PORTDbits.RD2 = 1;    // Buzzer ON
+
+            for (i = 7; i > 0; i--)   // LED chase left to right
+            {
+                PORTB = (1 << i);
+                delay();
+                PORTB = 0x00;
+                delay();
+            }
+        }
+    }
+}

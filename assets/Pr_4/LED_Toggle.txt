@@ -1,0 +1,32 @@
+/*-----------------------------------------------------------
+   Practical 4 (Part A): LED Blinking using PIC18F4550
+   Controller : PIC18F4550
+   Clock      : 48 MHz
+------------------------------------------------------------*/
+
+#include <p18f4550.h>
+
+//-----------------------------------------------
+// Simple delay function
+//-----------------------------------------------
+void delay(unsigned int time)
+{
+    unsigned int i, j;
+    for (i = 0; i < time; i++)
+        for (j = 0; j < 5000; j++);
+}
+
+//-----------------------------------------------
+// Main function
+//-----------------------------------------------
+void main(void)
+{
+    TRISB = 0x00;   // Set PORTB as output
+    LATB  = 0xFF;   // Initialize LEDs OFF (active low setup)
+
+    while (1)
+    {
+        LATB = ~LATB;   // Toggle all LEDs
+        delay(200);     // 200 ms delay
+    }
+}

@@ -1,0 +1,57 @@
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.txt
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.c
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.asm
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.hex
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.json
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload

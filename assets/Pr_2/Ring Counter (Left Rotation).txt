@@ -1,0 +1,18 @@
+#include <REGX51.H>
+
+void delay(unsigned int time) {
+    unsigned int i, j;
+    for(i = 0; i < time; i++)
+        for(j = 0; j < 1275; j++);
+}
+
+void main() {
+    unsigned char val = 0x01;
+    while(1) {
+        P1 = val;
+        delay(500);
+        val <<= 1;
+        if(val == 0x00)
+            val = 0x01;
+    }
+}

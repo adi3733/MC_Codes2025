@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microcontroller Code Vault</title>
+
+  <!-- 🌐 Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/assets/favicon.png" />
+
+  <!-- ✅ CSS -->
+  <link rel="stylesheet" href="/style-v2.css" />
+
+  <!-- 📱 PWA Support -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00c4ff" />
+
+  <script>
+    // 🧱 Service Worker Registration
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js").then(reg => {
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              showUpdatePopup();
+            }
+          });
+        });
+      }).catch(err => console.warn("SW registration failed:", err));
+    }
+
+    // ✨ Show “New Version Available” popup
+    function showUpdatePopup() {
+      const popup = document.createElement("div");
+      popup.innerHTML = `
+        <div style="
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #00c4ff, #0077ff);
+          color: #fff;
+          padding: 12px 20px;
+          border-radius: 10px;
+          font-weight: 500;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          z-index: 9999;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        ">
+          ✨ New version available — Click to refresh
+        </div>
+      `;
+      document.body.appendChild(popup);
+      popup.addEventListener("click", () => {
+        navigator.serviceWorker.getRegistration().then(reg => {
+          if (reg && reg.waiting) {
+            reg.waiting.postMessage("SKIP_WAITING");
+            window.location.reload();
+          }
+        });
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <!-- 🌟 Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-content">
+      <img src="/assets/HD Logo PNG.png" alt="Techh Buddies Logo" class="splash-logo" />
+      <h1 class="splash-title">Techh Buddies</h1>
+      <p class="splash-caption">Your Friendly Techh Partner</p>
+    </div>
+  </div>
+
+  <!-- 🌟 Header -->
+  <header>
+    <div class="logo-title">
+      <img src="/assets/micro_logo.png" alt="MC Logo" class="logo" />
+      <h1>Microcontroller Code Vault</h1>
+    </div>
+    <p>All your Microcontroller practicals — beautifully organized.</p>
+  </header>
+
+  <!-- 🧱 Layout Switch (Visible on Mobile Only) -->
+  <div class="layout-toggle" id="layoutToggleContainer">
+    <button id="toggleLayout">🔳 Switch to 2x2 Layout</button>
+    <small class="layout-note">(Mobile Only)</small>
+  </div>
+
+  <!-- 🧠 Cache Download Progress -->
+  <p id="cacheProgress"
+     style="display:none; text-align:center; margin-top:10px; color:#00ff9d; font-weight:500;">
+  </p>
+
+  <!-- 📘 Main Grid -->
+  <main class="grid" id="practicalList"></main>
+
+  <!-- 💬 Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-card">
+      <div class="popup-header">
+        <h2 id="popupTitle"></h2>
+        <button id="closeBtn" class="close-btn">✖</button>
+      </div>
+
+      <div id="fileTabs" class="file-tabs"></div>
+      <pre id="popupCode"></pre>
+
+      <div class="popup-controls">
+        <button id="fontMinus" class="font-btn">−</button>
+        <button id="fontPlus" class="font-btn">+</button>
+        <button id="copyBtn" class="copy-btn">📋 Copy Code</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚠️ Disclaimer -->
+  <section class="disclaimer">
+    <div class="disclaimer-title">
+      <img src="/assets/Caution.png" alt="Caution Icon" class="caution-icon" />
+      <h3>Disclaimer</h3>
+    </div>
+    <p>
+      This website is created solely for <strong>educational purposes</strong>.
+      It is intended to help students understand and practice Microcontroller programming and interfacing.
+      Please do not use this platform, its content, or provided code for any form of
+      <strong>cheating, malpractice, or academic dishonesty</strong> during examinations or assessments.
+    </p>
+  </section>
+
+  <!-- ⚡ Footer -->
+  <footer>
+    <p>
+      Made with ❤️ by
+      <a href="https://www.techhbuddies.com" target="_blank" class="footer-link">
+        TechhBuddies
+      </a>
+      | Microcontroller Code Vault © 2025
+      <br />
+      <small>Last updated: <span id="buildVersion"></span></small>
+    </p>
+  </footer>
+
+  <!-- ⚙️ Scripts -->
+  <script src="/script.js"></script>
+
+  <!-- 🎬 Splash Fade-out -->
+  <script>
+    window.addEventListener("load", () => {
+      const splash = document.getElementById("splash-screen");
+      setTimeout(() => {
+        splash.classList.add("hide");
+        setTimeout(() => splash.remove(), 800);
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

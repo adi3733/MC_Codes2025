@@ -1,0 +1,32 @@
+#include <reg51.h>
+
+void ms_delay(unsigned int t) {
+    unsigned int i, j;
+    for(i=0;i<t;i++)
+        for(j=0;j<1275;j++);
+}
+
+void main(void) {
+    unsigned char val;
+    while(1) {
+        // Rise
+        for(val=0; val<255; val+=5) {
+            P1 = val;
+            ms_delay(5);
+        }
+
+        // High-level hold
+        P1 = 255;
+        ms_delay(200);
+
+        // Fall
+        for(val=255; val>0; val-=5) {
+            P1 = val;
+            ms_delay(5);
+        }
+
+        // Low-level hold
+        P1 = 0;
+        ms_delay(200);
+    }
+}
