@@ -8,31 +8,31 @@
       ]
     },
     {
-      "source": "/assets/*.txt",
+      "source": "/assets/:path*.txt",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
-      "source": "/assets/*.c",
+      "source": "/assets/:path*.c",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
-      "source": "/assets/*.asm",
+      "source": "/assets/:path*.asm",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
-      "source": "/assets/*.hex",
+      "source": "/assets/:path*.hex",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
-      "source": "/assets/*.(js|css|png|jpg|jpeg|svg|webp|ico|json|ttf|woff|woff2)",
+      "source": "/assets/:path*.(js|css|png|jpg|jpeg|svg|webp|ico|json|ttf|woff|woff2)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
