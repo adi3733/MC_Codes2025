@@ -1,61 +1,63 @@
-// 🧩 Microcontroller Code Vault by TechhBuddies
-// Supports multi-file practicals (txt/asm/c files) with file switching tabs
+// 🧩 Microcontroller Code Vault by TechhBuddies (v3.0 - Offline + DOCX Outputs)
 
+// 🧱 Practical List
 const practicals = [
-{
-  id: 1,
-  name: "Practical 1",
-  desc: "Simple Program on Memory Transfer",
-  files: [
-    { name: "pr_1.txt", path: "/assets/pr_1.txt" },
-    { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
-  ]
-},
-
-{
-  id: 2,
-  name: "Practical 2",
-  desc: "Parallel Port Interfacing of LEDs",
-  files: [
-    { name: "Flashing LEDs.txt", path: "/assets/Pr_2/Flashing LEDs.txt" },
-    { name: "LED Binary Counter.txt", path: "/assets/Pr_2/LED Binary Counter.txt" },
-    { name: "Ring Counter (Left Rotation).txt", path: "/assets/Pr_2/Ring Counter (Left Rotation).txt" },
-    { name: "Ring Counter Left & Right Shift.txt", path: "/assets/Pr_2/Ring Counter Left & Right Shift.txt" },
-    { name: "Alternate LED Flashing (EvenOdd Pattern).txt", path: "/assets/Pr_2/Alternate LED Flashing (EvenOdd Pattern).txt" },
-    { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
-  ]
-},
-
-{
-  id: 3,
-  name: "Practical 3",
-  desc: "Waveform Generation using DAC",
-  files: [
-    { name: "Square_wave.txt", path: "/assets/Pr_3/Square_wave.txt" },
-    { name: "Triangular_wave.txt", path: "/assets/Pr_3/Triangular_wave.txt" },
-    { name: "Ramp_wave.txt", path: "/assets/Pr_3/Ramp_wave.txt" },
-    { name: "Staircase_wave.txt", path: "/assets/Pr_3/Staircase_wave.txt" },
-    { name: "Trapezoidal_wave.txt", path: "/assets/Pr_3/Trapezoidal_wave.txt" },
-    { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
-  ]
-},
-{
-  id: 4,
-  name: "Practical 4",
-  desc: "Interfacing Push Buttons, LEDs, Relay & Buzzer",
-  files: [
-    { name: "LED Blinking Only", path: "/assets/Pr_4/LED_Toggle.txt" },
-    { name: "LED_Buzzer_Relay.txt", path: "/assets/Pr_4/LED_Buzzer_Relay.txt" }
-  ]
-},
-
+  {
+    id: 1,
+    name: "Practical 1",
+    desc: "Simple Program on Memory Transfer",
+    files: [
+      { name: "pr_1.txt", path: "/assets/pr_1.txt" },
+      { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_1_out.docx"
+  },
+  {
+    id: 2,
+    name: "Practical 2",
+    desc: "Parallel Port Interfacing of LEDs",
+    files: [
+      { name: "Flashing LEDs.txt", path: "/assets/Pr_2/Flashing LEDs.txt" },
+      { name: "LED Binary Counter.txt", path: "/assets/Pr_2/LED Binary Counter.txt" },
+      { name: "Ring Counter (Left Rotation).txt", path: "/assets/Pr_2/Ring Counter (Left Rotation).txt" },
+      { name: "Ring Counter Left & Right Shift.txt", path: "/assets/Pr_2/Ring Counter Left & Right Shift.txt" },
+      { name: "Alternate LED Flashing (EvenOdd Pattern).txt", path: "/assets/Pr_2/Alternate LED Flashing (EvenOdd Pattern).txt" },
+      { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_2_out.docx"
+  },
+  {
+    id: 3,
+    name: "Practical 3",
+    desc: "Waveform Generation using DAC",
+    files: [
+      { name: "Square_wave.txt", path: "/assets/Pr_3/Square_wave.txt" },
+      { name: "Triangular_wave.txt", path: "/assets/Pr_3/Triangular_wave.txt" },
+      { name: "Ramp_wave.txt", path: "/assets/Pr_3/Ramp_wave.txt" },
+      { name: "Staircase_wave.txt", path: "/assets/Pr_3/Staircase_wave.txt" },
+      { name: "Trapezoidal_wave.txt", path: "/assets/Pr_3/Trapezoidal_wave.txt" },
+      { name: "STARTUP.txt", path: "/assets/STARTUP.txt" }
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_3_out.docx"
+  },
+  {
+    id: 4,
+    name: "Practical 4",
+    desc: "Interfacing Push Buttons, LEDs, Relay & Buzzer",
+    files: [
+      { name: "LED_Toggle.txt", path: "/assets/Pr_4/LED_Toggle.txt" },
+      { name: "LED_Buzzer_Relay.txt", path: "/assets/Pr_4/LED_Buzzer_Relay.txt" }
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_4_out.docx"
+  },
   {
     id: 5,
     name: "Practical 5",
     desc: "Interfacing LCD to Display Message",
     files: [
       { name: "pr_5.txt", path: "/assets/pr_5.txt" }
-    ]
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_5_out.docx"
   },
   {
     id: 6,
@@ -63,7 +65,8 @@ const practicals = [
     desc: "Generate square wave using timer with interrupt",
     files: [
       { name: "pr_6.txt", path: "/assets/pr_6.txt" }
-    ]
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_6_out.docx"
   },
   {
     id: 7,
@@ -71,7 +74,8 @@ const practicals = [
     desc: "Interfacing serial port with PC (both side communication)",
     files: [
       { name: "pr_7.txt", path: "/assets/pr_7.txt" }
-    ]
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_7_out.docx"
   },
   {
     id: 8,
@@ -79,7 +83,8 @@ const practicals = [
     desc: "Interface analog voltage 0-5V to ADC and display value on LCD",
     files: [
       { name: "pr_8.txt", path: "/assets/pr_8.txt" }
-    ]
+    ],
+    output: "/assets/Outputs/MC_PRACTICAL_8_out.docx"
   }
 ];
 
@@ -88,12 +93,12 @@ const list = document.getElementById("practicalList");
 const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popupTitle");
 const popupCode = document.getElementById("popupCode");
-const copyBtn = document.getElementById("copyBtn");
-const closeBtn = document.getElementById("closeBtn");
 const fileTabs = document.getElementById("fileTabs");
+const closeBtn = document.getElementById("closeBtn");
+const cacheProgress = document.getElementById("cacheProgress");
 
 // 🧱 Render Practical Cards
-practicals.forEach(p => {
+practicals.forEach((p) => {
   const card = document.createElement("div");
   card.className = "card";
   const count = p.files.length;
@@ -105,16 +110,16 @@ practicals.forEach(p => {
   list.appendChild(card);
 });
 
-// 🌐 Popup Logic
+// 📘 Popup Logic
 let currentCode = "";
 let currentFontSize = 0.95;
 
 function openPopup(p) {
-  popupTitle.textContent = `${p.name}: ${p.desc}`;
   popup.style.display = "flex";
+  popupTitle.textContent = `${p.name}: ${p.desc}`;
+  fileTabs.innerHTML = "";
 
   // Create file tabs
-  fileTabs.innerHTML = "";
   p.files.forEach((f, idx) => {
     const btn = document.createElement("button");
     btn.className = "file-tab";
@@ -126,24 +131,71 @@ function openPopup(p) {
     fileTabs.appendChild(btn);
   });
 
-  // Load first file by default
+  // Add controls dynamically
+  const controls = document.querySelector(".popup-controls");
+  controls.innerHTML = "";
+
+  // Download Output Button
+  if (p.output) {
+    const downloadBtn = document.createElement("button");
+    downloadBtn.textContent = "⬇️ Download Output (.docx)";
+    downloadBtn.className = "copy-btn";
+    downloadBtn.onclick = () => {
+      const a = document.createElement("a");
+      a.href = p.output;
+      a.download = p.output.split("/").pop();
+      a.click();
+    };
+    controls.appendChild(downloadBtn);
+  }
+
+  // Font and Copy Controls
+  const fontMinus = document.createElement("button");
+  fontMinus.textContent = "−";
+  fontMinus.className = "font-btn";
+  fontMinus.onclick = () => {
+    if (currentFontSize > 0.6) {
+      currentFontSize -= 0.1;
+      popupCode.style.fontSize = `${currentFontSize}rem`;
+    }
+  };
+
+  const fontPlus = document.createElement("button");
+  fontPlus.textContent = "+";
+  fontPlus.className = "font-btn";
+  fontPlus.onclick = () => {
+    currentFontSize += 0.1;
+    popupCode.style.fontSize = `${currentFontSize}rem`;
+  };
+
+  const copyBtn = document.createElement("button");
+  copyBtn.textContent = "📋 Copy Code";
+  copyBtn.className = "copy-btn";
+  copyBtn.onclick = () => {
+    if (!currentCode) return;
+    navigator.clipboard.writeText(currentCode);
+    copyBtn.textContent = "✅ Copied!";
+    setTimeout(() => (copyBtn.textContent = "📋 Copy Code"), 1500);
+  };
+
+  controls.appendChild(fontMinus);
+  controls.appendChild(fontPlus);
+  controls.appendChild(copyBtn);
+
+  // Load first file
   setActiveFile(p, 0);
 }
 
 function setActiveFile(practical, index) {
   const tabs = Array.from(fileTabs.children);
   tabs.forEach((tab, i) => tab.classList.toggle("active", i === index));
-  const file = practical.files[index];
 
+  const file = practical.files[index];
   fetch(file.path)
-    .then(res => {
-      if (!res.ok) throw new Error("File not found");
-      return res.text();
-    })
-    .then(code => {
+    .then((res) => res.text())
+    .then((code) => {
       currentCode = code;
       popupCode.textContent = code;
-      copyBtn.textContent = "📋 Copy Code";
       popupCode.style.fontSize = `${currentFontSize}rem`;
     })
     .catch(() => {
@@ -151,45 +203,17 @@ function setActiveFile(practical, index) {
     });
 }
 
-// 📋 Copy Function
-copyBtn.onclick = () => {
-  if (!currentCode) return;
-  navigator.clipboard.writeText(currentCode);
-  copyBtn.textContent = "✅ Copied!";
-  setTimeout(() => (copyBtn.textContent = "📋 Copy Code"), 1500);
-};
-
-// 🔤 Font Size Controls
-const fontPlus = document.getElementById("fontPlus");
-const fontMinus = document.getElementById("fontMinus");
-
-fontPlus.onclick = () => {
-  currentFontSize += 0.1;
-  popupCode.style.fontSize = `${currentFontSize}rem`;
-};
-
-fontMinus.onclick = () => {
-  if (currentFontSize > 0.6) {
-    currentFontSize -= 0.1;
-    popupCode.style.fontSize = `${currentFontSize}rem`;
-  }
-};
-
-// ❌ Close Popup
 closeBtn.onclick = () => {
   popup.style.display = "none";
 };
 
 // 🕒 Build Timestamp
-const buildVersion = document.getElementById("buildVersion");
-const now = new Date();
-buildVersion.textContent = now.toLocaleString("en-IN", {
+document.getElementById("buildVersion").textContent = new Date().toLocaleString("en-IN", {
   dateStyle: "medium",
-  timeStyle: "short",
+  timeStyle: "short"
 });
 
-
-// 📱 Layout Switch (1-column ↔ 2-column for mobile)
+// 📱 Layout Toggle (Mobile)
 const toggleBtn = document.getElementById("toggleLayout");
 const layoutContainer = document.getElementById("layoutToggleContainer");
 const grid = document.getElementById("practicalList");
@@ -197,39 +221,24 @@ const grid = document.getElementById("practicalList");
 if (window.innerWidth <= 600) {
   layoutContainer.style.display = "block";
   let isTwoColumn = false;
-
   toggleBtn.addEventListener("click", () => {
     isTwoColumn = !isTwoColumn;
-
-    if (isTwoColumn) {
-      grid.style.gridTemplateColumns = "repeat(2, 1fr)";
-      toggleBtn.textContent = "📋 Switch to 1-Column Layout";
-    } else {
-      grid.style.gridTemplateColumns = "1fr";
-      toggleBtn.textContent = "🔳 Switch to 2-Column Layout";
-    }
+    grid.style.gridTemplateColumns = isTwoColumn ? "repeat(2, 1fr)" : "1fr";
+    toggleBtn.textContent = isTwoColumn ? "📋 Switch to 1-Column Layout" : "🔳 Switch to 2x2 Layout";
   });
-} else {
-  layoutContainer.style.display = "none";
 }
 
-
-// 🧱 Listen for cache progress messages from service worker
+// 🧱 Cache Progress from Service Worker
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.addEventListener("message", event => {
+  navigator.serviceWorker.addEventListener("message", (event) => {
     if (event.data && event.data.type === "CACHE_PROGRESS") {
       const percent = event.data.progress;
-      const progressEl = document.getElementById("cacheProgress");
-
-      if (progressEl) {
-        progressEl.style.display = "block";
-        progressEl.textContent = `Downloading for offline use: ${percent}%`;
-
-        if (percent >= 100) {
-          setTimeout(() => {
-            progressEl.textContent = "✅ Ready to use offline!";
-          }, 500);
-        }
+      cacheProgress.style.display = "block";
+      cacheProgress.textContent = `Downloading for offline use: ${percent}%`;
+      if (percent >= 100) {
+        setTimeout(() => {
+          cacheProgress.textContent = "✅ Ready to use offline!";
+        }, 800);
       }
     }
   });
