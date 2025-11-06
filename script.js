@@ -197,3 +197,39 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+
+// ✅ Listen for CACHE_COMPLETE message (when all files saved)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "CACHE_COMPLETE") {
+      showCacheCompleteMessage();
+    }
+  });
+}
+
+// 🎉 Function to show success popup
+function showCacheCompleteMessage() {
+  const msg = document.createElement("div");
+  msg.textContent = "✅ All Files Are Saved In Cache — You Can Use Offline";
+  msg.style.cssText = `
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #00ff9d, #0099ff);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 9999;
+    animation: fadeIn 0.4s ease;
+  `;
+  document.body.appendChild(msg);
+
+  setTimeout(() => {
+    msg.style.transition = "opacity 0.8s ease";
+    msg.style.opacity = "0";
+    setTimeout(() => msg.remove(), 800);
+  }, 4000);
+}
