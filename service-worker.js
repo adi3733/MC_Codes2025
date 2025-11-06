@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------
-   Microcontroller Code Vault - Full Offline Cache + DOCX Output Support
+   Microcontroller Code Vault - Full Offline + DOCX Cache Support
    Author: Adiii
-   Version: 3.0
+   Version: 4.0
 -------------------------------------------------------------- */
 
-const CACHE_NAME = "microcontroller-vault-v3";
+const CACHE_NAME = "microcontroller-vault-v4";
 const CACHE_ASSETS = [
-  "/",
+  "/", 
   "/index.html",
   "/style-v2.css",
   "/script.js",
@@ -38,19 +38,13 @@ const CACHE_ASSETS = [
   "/assets/Pr_4/LED_Toggle.txt",
   "/assets/Pr_4/LED_Buzzer_Relay.txt",
 
-  // Practical 5
+  // Practical 5–8
   "/assets/pr_5.txt",
-
-  // Practical 6
   "/assets/pr_6.txt",
-
-  // Practical 7
   "/assets/pr_7.txt",
-
-  // Practical 8
   "/assets/pr_8.txt",
 
-  // ---- Output DOCX Files ----
+  // ---- Output DOCX Files (✅ Cached Offline) ----
   "/assets/Outputs/MC_PRACTICAL_1_out.docx",
   "/assets/Outputs/MC_PRACTICAL_2_out.docx",
   "/assets/Outputs/MC_PRACTICAL_3_out.docx",
@@ -62,10 +56,11 @@ const CACHE_ASSETS = [
 ];
 
 /* ----------------------------
-   INSTALL EVENT - Pre-cache all assets
+   INSTALL EVENT - Pre-cache everything with progress
 ----------------------------- */
 self.addEventListener("install", (event) => {
-  console.log("[SW] Installing and caching assets...");
+  console.log("[SW] Installing...");
+
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
@@ -76,12 +71,12 @@ self.addEventListener("install", (event) => {
         try {
           await cache.add(url);
           done++;
-          // 🔁 Send progress update to all clients
+          // Notify UI about cache progress
           const clientsList = await self.clients.matchAll();
           clientsList.forEach((client) =>
             client.postMessage({
               type: "CACHE_PROGRESS",
-              progress: Math.round((done / total) * 100),
+              progress: Math.round((done / total) * 100)
             })
           );
         } catch (err) {
@@ -91,53 +86,50 @@ self.addEventListener("install", (event) => {
     })()
   );
 
-  self.skipWaiting(); // Activate immediately
+  self.skipWaiting();
 });
 
 /* ----------------------------
    ACTIVATE EVENT - Clean old caches
 ----------------------------- */
 self.addEventListener("activate", (event) => {
-  console.log("[SW] Activating new service worker...");
+  console.log("[SW] Activating new cache version...");
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log("[SW] Removing old cache:", key);
+            console.log("[SW] Deleting old cache:", key);
             return caches.delete(key);
           }
         })
       )
     )
   );
-  self.clients.claim(); // Start controlling open clients immediately
+  self.clients.claim();
 });
 
 /* ----------------------------
-   FETCH EVENT - Serve cached files first
+   FETCH EVENT - Serve from cache first, fallback to network
 ----------------------------- */
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedRes) => {
-      if (cachedRes) {
-        // ✅ Serve from cache
-        return cachedRes;
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse; // ✅ Serve from cache
       }
 
-      // 🌐 Otherwise fetch from network and cache dynamically
       return fetch(event.request)
-        .then((fetchRes) => {
-          if (!fetchRes || fetchRes.status !== 200 || fetchRes.type !== "basic") {
-            return fetchRes;
-          }
-
-          const resClone = fetchRes.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
-          return fetchRes;
+        .then((fetchResponse) => {
+          // 🧱 Clone and cache for future offline use (including .docx)
+          const responseClone = fetchResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+          return fetchResponse;
         })
         .catch(() => {
-          // 🧱 Fallback: return index.html if offline and request is a page
+          // Fallback if offline
           if (event.request.destination === "document") {
             return caches.match("/index.html");
           }
