@@ -158,5 +158,42 @@
       }, 200);
     });
   </script>
+
+  <!-- 🚀 Preload .docx Outputs for Faster Offline Availability -->
+<script>
+  window.addEventListener("load", () => {
+    const docxFiles = [
+      "/assets/Outputs/MC_PRACTICAL_1_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_2_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_3_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_4_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_5_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_6_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_7_out.docx",
+      "/assets/Outputs/MC_PRACTICAL_8_out.docx"
+    ];
+
+    // Show preload message
+    const preloadMsg = document.createElement("p");
+    preloadMsg.textContent = "⚙️ Preparing output reports for offline use...";
+    preloadMsg.style.cssText = "text-align:center; color:#00ff9d; font-weight:500;";
+    document.body.appendChild(preloadMsg);
+
+    // Start background fetch for all .docx files
+    docxFiles.forEach(url => {
+      fetch(url)
+        .then(res => {
+          if (res.ok) {
+            caches.open("microcontroller-vault-v4").then(cache => cache.put(url, res.clone()));
+          }
+        })
+        .catch(() => console.warn("⚠️ Skipped preloading:", url));
+    });
+
+    // Hide message after 3s
+    setTimeout(() => preloadMsg.remove(), 3000);
+  });
+</script>
+
 </body>
 </html>
