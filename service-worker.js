@@ -33,7 +33,9 @@ const CACHE_ASSETS = [
   "/assets/Outputs/MC_PRACTICAL_8_out.docx",
 
   // ZIP File
-  "/assets/MC Dtaa.zip"
+  // ZIP File (renamed to remove space)
+"/assets/MC_Dtaa.zip"
+
 ];
 
 self.addEventListener("install", (event) => {
