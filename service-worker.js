@@ -1,7 +1,6 @@
 /* -------------------------------------------------------------
-   Microcontroller Code Vault - Full Offline Ready (with User Complete Message)
-   Author: Adiii
-   Version: 6.0
+   Microcontroller Code Vault - Offline Ready + Manual ZIP Support
+   Author: Adiii | Version: 7.0
 -------------------------------------------------------------- */
 
 const CACHE_NAME = "microcontroller-vault-v6";
@@ -9,7 +8,7 @@ const CACHE_ASSETS = [
   "/", "/index.html", "/style-v2.css", "/script.js", "/manifest.json",
   "/favicon.ico", "/HD Logo PNG.png", "/micro_logo.png", "/Caution.png",
 
-  // ---- Practicals ----
+  // Practicals + DOCX
   "/assets/pr_1.txt", "/assets/STARTUP.txt",
   "/assets/Pr_2/Flashing LEDs.txt",
   "/assets/Pr_2/LED Binary Counter.txt",
@@ -23,12 +22,7 @@ const CACHE_ASSETS = [
   "/assets/Pr_3/Trapezoidal_wave.txt",
   "/assets/Pr_4/LED_Toggle.txt",
   "/assets/Pr_4/LED_Buzzer_Relay.txt",
-  "/assets/pr_5.txt",
-  "/assets/pr_6.txt",
-  "/assets/pr_7.txt",
-  "/assets/pr_8.txt",
-
-  // ---- Output DOCX Files ----
+  "/assets/pr_5.txt", "/assets/pr_6.txt", "/assets/pr_7.txt", "/assets/pr_8.txt",
   "/assets/Outputs/MC_PRACTICAL_1_out.docx",
   "/assets/Outputs/MC_PRACTICAL_2_out.docx",
   "/assets/Outputs/MC_PRACTICAL_3_out.docx",
@@ -38,56 +32,22 @@ const CACHE_ASSETS = [
   "/assets/Outputs/MC_PRACTICAL_7_out.docx",
   "/assets/Outputs/MC_PRACTICAL_8_out.docx",
 
-  // ---- ZIP File ----
+  // ZIP File
   "/assets/MC Dtaa.zip"
 ];
 
-
-/* ----------------------------
-   INSTALL EVENT - Cache everything with progress
------------------------------ */
 self.addEventListener("install", (event) => {
-  console.log("[SW] Installing and caching all assets...");
-
+  console.log("[SW] Installing assets...");
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      const total = CACHE_ASSETS.length;
-      let done = 0;
-
-      for (const url of CACHE_ASSETS) {
-        try {
-          await cache.add(url);
-          done++;
-          const percent = Math.round((done / total) * 100);
-          // Send progress update
-          const clientsList = await self.clients.matchAll();
-          clientsList.forEach(client => client.postMessage({
-            type: "CACHE_PROGRESS",
-            progress: percent
-          }));
-
-          // When done 100% → send "CACHE_COMPLETE"
-          if (done === total) {
-            clientsList.forEach(client => client.postMessage({
-              type: "CACHE_COMPLETE"
-            }));
-          }
-        } catch (err) {
-          console.warn("[SW] ⚠️ Failed to cache:", url);
-        }
-      }
+      await cache.addAll(CACHE_ASSETS);
     })()
   );
-
   self.skipWaiting();
 });
 
-/* ----------------------------
-   ACTIVATE EVENT
------------------------------ */
 self.addEventListener("activate", (event) => {
-  console.log("[SW] Activated new version:", CACHE_NAME);
   event.waitUntil(
     caches.keys().then(keys => Promise.all(
       keys.map(key => key !== CACHE_NAME && caches.delete(key))
@@ -96,24 +56,14 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-/* ----------------------------
-   FETCH EVENT
------------------------------ */
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(cachedRes => {
-      if (cachedRes) return cachedRes;
-      return fetch(event.request)
-        .then(fetchRes => {
-          const clone = fetchRes.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-          return fetchRes;
-        })
-        .catch(() => {
-          if (event.request.destination === "document") {
-            return caches.match("/index.html");
-          }
-        });
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).then(response => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      }).catch(() => caches.match("/index.html"));
     })
   );
 });

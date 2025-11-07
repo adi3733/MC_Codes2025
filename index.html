@@ -48,7 +48,6 @@
           box-shadow: 0 4px 10px rgba(0,0,0,0.3);
           z-index: 9999;
           cursor: pointer;
-          transition: transform 0.2s ease;
         ">
           ✨ New version available — Click to refresh
         </div>
@@ -76,27 +75,26 @@
     </div>
   </div>
 
-  <!-- 💾 ZIP Download Button -->
-<div id="zipDownloadContainer" style="text-align:center; margin:20px 0;">
-  <button id="downloadZipBtn"
-    style="
-      background: linear-gradient(135deg, #00ff9d, #0099ff);
-      color: white;
-      border: none;
-      padding: 12px 22px;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;">
-    ⬇️ Download MC Dtaa.zip
-  </button>
-  <p style="color:#00ff9d; font-size:0.9rem; margin-top:6px;">
-    (Auto-cached for offline use)
-  </p>
-</div>
-
+  <!-- 💾 Manual ZIP Download Button -->
+  <div id="zipDownloadContainer" style="text-align:center; margin:20px 0;">
+    <button id="downloadZipBtn"
+      style="
+        background: linear-gradient(135deg, #00ff9d, #0099ff);
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;">
+      ⬇️ Download MC Dtaa.zip
+    </button>
+    <p style="color:#00ff9d; font-size:0.9rem; margin-top:6px;">
+      (File cached for offline use — click to save)
+    </p>
+  </div>
 
   <!-- 🌟 Header -->
   <header>
@@ -107,21 +105,17 @@
     <p>All your Microcontroller practicals — beautifully organized.</p>
   </header>
 
-  <!-- 🧱 Layout Switch (Visible on Mobile Only) -->
   <div class="layout-toggle" id="layoutToggleContainer">
     <button id="toggleLayout">🔳 Switch to 2x2 Layout</button>
     <small class="layout-note">(Mobile Only)</small>
   </div>
 
-  <!-- 🧠 Cache Download Progress -->
   <p id="cacheProgress"
      style="display:none; text-align:center; margin-top:10px; color:#00ff9d; font-weight:500;">
   </p>
 
-  <!-- 📘 Main Grid -->
   <main class="grid" id="practicalList"></main>
 
-  <!-- 💬 Popup -->
   <div id="popup" class="popup">
     <div class="popup-card">
       <div class="popup-header">
@@ -149,12 +143,11 @@
     <p>
       This website is created solely for <strong>educational purposes</strong>.
       It is intended to help students understand and practice Microcontroller programming and interfacing.
-      Please do not use this platform, its content, or provided code for any form of
-      <strong>cheating, malpractice, or academic dishonesty</strong> during examinations or assessments.
+      Please do not use this platform or its content for any form of
+      <strong>cheating, malpractice, or academic dishonesty</strong>.
     </p>
   </section>
 
-  <!-- ⚡ Footer -->
   <footer>
     <p>
       Made with ❤️ by
@@ -170,7 +163,6 @@
   <!-- ⚙️ Scripts -->
   <script src="/script.js"></script>
 
-  <!-- 🎬 Splash Fade-out -->
   <script>
     window.addEventListener("load", () => {
       const splash = document.getElementById("splash-screen");
@@ -180,91 +172,5 @@
       }, 200);
     });
   </script>
-
-  <!-- 🚀 Preload .docx Outputs for Faster Offline Availability -->
-<script>
-  window.addEventListener("load", () => {
-    const docxFiles = [
-      "/assets/Outputs/MC_PRACTICAL_1_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_2_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_3_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_4_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_5_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_6_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_7_out.docx",
-      "/assets/Outputs/MC_PRACTICAL_8_out.docx"
-    ];
-
-    // Show preload message
-    const preloadMsg = document.createElement("p");
-    preloadMsg.textContent = "⚙️ Preparing output reports for offline use...";
-    preloadMsg.style.cssText = "text-align:center; color:#00ff9d; font-weight:500;";
-    document.body.appendChild(preloadMsg);
-
-    // Start background fetch for all .docx files
-    docxFiles.forEach(url => {
-      fetch(url)
-        .then(res => {
-          if (res.ok) {
-            caches.open("microcontroller-vault-v4").then(cache => cache.put(url, res.clone()));
-          }
-        })
-        .catch(() => console.warn("⚠️ Skipped preloading:", url));
-    });
-
-    // Hide message after 3s
-    setTimeout(() => preloadMsg.remove(), 3000);
-  });
-</script>
-
-<!-- 💾 Auto Download MC Dtaa.zip on Homepage Load -->
-<script>
-window.addEventListener("load", async () => {
-  const zipUrl = "/assets/MC Dtaa.zip";
-
-  try {
-    const cache = await caches.open("microcontroller-vault-v6");
-    const cached = await cache.match(zipUrl);
-
-    if (!cached) {
-      const res = await fetch(zipUrl);
-      if (res.ok) {
-        await cache.put(zipUrl, res.clone());
-        console.log("✅ ZIP cached for offline use");
-      }
-    }
-
-    // Auto download to user's PC (optional)
-    const blob = cached ? await cached.blob() : await (await fetch(zipUrl)).blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = "MC Dtaa.zip";
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    URL.revokeObjectURL(blobUrl);
-    a.remove();
-
-    // Show confirmation toast
-    const msg = document.createElement("div");
-    msg.textContent = "💾 MC Dtaa.zip saved & cached for offline use!";
-    msg.style.cssText = `
-      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-      background: linear-gradient(135deg, #00ff9d, #0077ff);
-      color: white; padding: 12px 25px; border-radius: 12px;
-      font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      z-index: 9999; animation: fadeIn 0.4s ease;
-    `;
-    document.body.appendChild(msg);
-    setTimeout(() => { msg.style.opacity = "0"; msg.style.transition = "opacity 1s"; }, 4000);
-    setTimeout(() => msg.remove(), 5000);
-  } catch (err) {
-    console.warn("⚠️ ZIP caching or download failed:", err);
-  }
-});
-</script>
-
-
 </body>
 </html>

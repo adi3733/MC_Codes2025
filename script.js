@@ -235,24 +235,25 @@ function showCacheCompleteMessage() {
 }
 
 
-// 💾 ZIP File Download + Cache Logic
+// 🧩 Microcontroller Code Vault v7.0 — Full Offline + Manual ZIP Download
+
+// ✅ Everything from previous version unchanged (code/practicals setup) ...
+
+// 💾 ZIP Manual Download Button Logic
 const zipUrl = "/assets/MC Dtaa.zip";
 const zipBtn = document.getElementById("downloadZipBtn");
 
 if (zipBtn) {
   zipBtn.addEventListener("click", async () => {
     try {
-      // open cache
       const cache = await caches.open("microcontroller-vault-v6");
       const cached = await cache.match(zipUrl);
       let blob;
 
       if (cached) {
-        // ✅ use cached version if available
         blob = await cached.blob();
         showToast("✅ Downloading MC Dtaa.zip (from cache)");
       } else {
-        // 🌐 fetch online and cache it
         const res = await fetch(zipUrl);
         if (!res.ok) throw new Error("Network error");
         blob = await res.blob();
@@ -260,7 +261,6 @@ if (zipBtn) {
         showToast("✅ MC Dtaa.zip downloaded & cached for offline use");
       }
 
-      // trigger download
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = blobUrl;
@@ -277,7 +277,7 @@ if (zipBtn) {
   });
 }
 
-// 🌈 Toast Message Function (reusable)
+// 🌈 Toast Message Function (Reusable)
 function showToast(message) {
   const toast = document.createElement("div");
   toast.textContent = message;
