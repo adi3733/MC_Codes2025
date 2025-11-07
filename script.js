@@ -240,7 +240,8 @@ function showCacheCompleteMessage() {
 // ✅ Everything from previous version unchanged (code/practicals setup) ...
 
 // 💾 ZIP Manual Download Button Logic
-const zipUrl = "/assets/MC Dtaa.zip";
+const zipUrl = "/assets/MC_Dtaa.zip";
+
 const zipBtn = document.getElementById("downloadZipBtn");
 
 if (zipBtn) {
