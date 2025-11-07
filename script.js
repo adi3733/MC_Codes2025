@@ -233,3 +233,71 @@ function showCacheCompleteMessage() {
     setTimeout(() => msg.remove(), 800);
   }, 4000);
 }
+
+
+// 💾 ZIP File Download + Cache Logic
+const zipUrl = "/assets/MC Dtaa.zip";
+const zipBtn = document.getElementById("downloadZipBtn");
+
+if (zipBtn) {
+  zipBtn.addEventListener("click", async () => {
+    try {
+      // open cache
+      const cache = await caches.open("microcontroller-vault-v6");
+      const cached = await cache.match(zipUrl);
+      let blob;
+
+      if (cached) {
+        // ✅ use cached version if available
+        blob = await cached.blob();
+        showToast("✅ Downloading MC Dtaa.zip (from cache)");
+      } else {
+        // 🌐 fetch online and cache it
+        const res = await fetch(zipUrl);
+        if (!res.ok) throw new Error("Network error");
+        blob = await res.blob();
+        await cache.put(zipUrl, res.clone());
+        showToast("✅ MC Dtaa.zip downloaded & cached for offline use");
+      }
+
+      // trigger download
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "MC Dtaa.zip";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("ZIP download failed:", err);
+      showToast("⚠️ File not available offline yet. Please try online once.");
+    }
+  });
+}
+
+// 🌈 Toast Message Function (reusable)
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #00ff9d, #0099ff);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => (toast.style.opacity = "1"), 100);
+  setTimeout(() => (toast.style.opacity = "0"), 4000);
+  setTimeout(() => toast.remove(), 4500);
+}

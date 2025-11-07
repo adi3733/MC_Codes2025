@@ -76,6 +76,28 @@
     </div>
   </div>
 
+  <!-- 💾 ZIP Download Button -->
+<div id="zipDownloadContainer" style="text-align:center; margin:20px 0;">
+  <button id="downloadZipBtn"
+    style="
+      background: linear-gradient(135deg, #00ff9d, #0099ff);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;">
+    ⬇️ Download MC Dtaa.zip
+  </button>
+  <p style="color:#00ff9d; font-size:0.9rem; margin-top:6px;">
+    (Auto-cached for offline use)
+  </p>
+</div>
+
+
   <!-- 🌟 Header -->
   <header>
     <div class="logo-title">
@@ -194,6 +216,55 @@
     setTimeout(() => preloadMsg.remove(), 3000);
   });
 </script>
+
+<!-- 💾 Auto Download MC Dtaa.zip on Homepage Load -->
+<script>
+window.addEventListener("load", async () => {
+  const zipUrl = "/assets/MC Dtaa.zip";
+
+  try {
+    const cache = await caches.open("microcontroller-vault-v6");
+    const cached = await cache.match(zipUrl);
+
+    if (!cached) {
+      const res = await fetch(zipUrl);
+      if (res.ok) {
+        await cache.put(zipUrl, res.clone());
+        console.log("✅ ZIP cached for offline use");
+      }
+    }
+
+    // Auto download to user's PC (optional)
+    const blob = cached ? await cached.blob() : await (await fetch(zipUrl)).blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = "MC Dtaa.zip";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(blobUrl);
+    a.remove();
+
+    // Show confirmation toast
+    const msg = document.createElement("div");
+    msg.textContent = "💾 MC Dtaa.zip saved & cached for offline use!";
+    msg.style.cssText = `
+      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #00ff9d, #0077ff);
+      color: white; padding: 12px 25px; border-radius: 12px;
+      font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 9999; animation: fadeIn 0.4s ease;
+    `;
+    document.body.appendChild(msg);
+    setTimeout(() => { msg.style.opacity = "0"; msg.style.transition = "opacity 1s"; }, 4000);
+    setTimeout(() => msg.remove(), 5000);
+  } catch (err) {
+    console.warn("⚠️ ZIP caching or download failed:", err);
+  }
+});
+</script>
+
 
 </body>
 </html>

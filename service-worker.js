@@ -11,26 +11,18 @@ const CACHE_ASSETS = [
 
   // ---- Practicals ----
   "/assets/pr_1.txt", "/assets/STARTUP.txt",
-
-  // Practical 2
   "/assets/Pr_2/Flashing LEDs.txt",
   "/assets/Pr_2/LED Binary Counter.txt",
   "/assets/Pr_2/Ring Counter (Left Rotation).txt",
   "/assets/Pr_2/Ring Counter Left & Right Shift.txt",
   "/assets/Pr_2/Alternate LED Flashing (EvenOdd Pattern).txt",
-
-  // Practical 3
   "/assets/Pr_3/Square_wave.txt",
   "/assets/Pr_3/Triangular_wave.txt",
   "/assets/Pr_3/Ramp_wave.txt",
   "/assets/Pr_3/Staircase_wave.txt",
   "/assets/Pr_3/Trapezoidal_wave.txt",
-
-  // Practical 4
   "/assets/Pr_4/LED_Toggle.txt",
   "/assets/Pr_4/LED_Buzzer_Relay.txt",
-
-  // Practical 5–8
   "/assets/pr_5.txt",
   "/assets/pr_6.txt",
   "/assets/pr_7.txt",
@@ -44,8 +36,12 @@ const CACHE_ASSETS = [
   "/assets/Outputs/MC_PRACTICAL_5_out.docx",
   "/assets/Outputs/MC_PRACTICAL_6_out.docx",
   "/assets/Outputs/MC_PRACTICAL_7_out.docx",
-  "/assets/Outputs/MC_PRACTICAL_8_out.docx"
+  "/assets/Outputs/MC_PRACTICAL_8_out.docx",
+
+  // ---- ZIP File ----
+  "/assets/MC Dtaa.zip"
 ];
+
 
 /* ----------------------------
    INSTALL EVENT - Cache everything with progress
